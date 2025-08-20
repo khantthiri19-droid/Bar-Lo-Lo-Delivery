@@ -1,0 +1,28 @@
+workflows:
+  android_apk:
+    name: Android APK
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      vars:
+        APP_NAME: "Bar LoLo Delivery"
+        BASE_URL: "http://example.com:4000"
+    scripts:
+      - name: Create Flutter project if missing
+        script: |
+          if [ ! -f "pubspec.yaml" ]; then
+            flutter create --org com.barlolodelivery --project-name barlolo_delivery .
+          fi
+      - name: Apply assets and custom main.dart
+        script: |
+          mkdir -p assets/branding tools
+          if ! grep -q "assets/branding/barlolo_logo.png" pubspec.yaml; then
+            awk '1; /uses-material-design/ {print "  assets:\n    - assets/branding/barlolo_logo.png"}' pubspec.yaml > pubspec.new && mv pubspec.new pubspec.yaml
+          fi
+          if [ -f tools/main.dart ]; then
+            mv tools/main.dart lib/main.dart
+          fi
+      - flutter pub get
+      - flutter build apk --release --dart-define=BASE_URL=${BASE_URL}
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
