@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const BLLApp());
+
+class BLLTheme {
+  static const deepOrange = Color(0xFFFF6A00);
+  static const deepBlue   = Color(0xFF0D47A1);
+
+  static ThemeData light() {
+    final base = ThemeData(useMaterial3: true);
+    return base.copyWith(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: deepOrange, primary: deepOrange, secondary: deepBlue),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: deepBlue, foregroundColor: Colors.white),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: deepOrange, foregroundColor: Colors.white,
+          shape: const StadiumBorder()),
+      ),
+      inputDecorationTheme: const InputDecorationTheme(border: OutlineInputBorder()),
+    );
+  }
+}
+
+class BLLApp extends StatelessWidget {
+  const BLLApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Bar LoLo Delivery',
+      theme: BLLTheme.light(),
+      debugShowCheckedModeBanner: false,
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Bar LoLo Delivery')),
+      body: Center(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Image.asset('assets/branding/barlolo_logo.png', width: 120, height: 120,
+            errorBuilder: (_, __, ___) => const Text('Upload assets/branding/barlolo_logo.png')),
+          const SizedBox(height: 16),
+          const Text('Deeply Blue + Deep Orange theme ready'),
+        ]),
+      ),
+    );
+  }
+}
